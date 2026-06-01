@@ -6,7 +6,9 @@ Control NordVPN directly from your Steam Deck's Quick Access Menu (QAM) — no d
 ![Platform](https://img.shields.io/badge/Platform-SteamOS_%7C_Bazzite_%7C_CachyOS-informational)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+
 ---
+
 
 ## 🛑 Critical Prerequisites
 
@@ -17,9 +19,12 @@ Before the Decky plugin UI can communicate with NordVPN, the underlying service 
 * **On SteamOS (Official Steam Deck):** The root filesystem is read-only by default and is good for undoing system changes after updates. Also Nordvpn is not in the steamos repos or available as a flatpak. So I made an automated installer script to help my steamos friends install nordvpn. Download and run it from the companion repository:
   [SteamOS NordVPN Helper Scripts](https://github.com/cwtechshiz/nordvpn-steamos-scripts)
 
-* **On Alternative Handheld Distros (Bazzite, CachyOS, etc.):** You do not need the helper scripts. Simply install NordVPN natively via your package manager, AUR, or official nordvpn setup script below:
+* **On Alternative Handheld Distros (Bazzite, CachyOS, etc.):** You do not need the helper scripts. Simply install NordVPN natively via your package manager or the AUR:
   ```bash
-  # Official Nordvpn installer script
+  # Example for CachyOS / Arch-based distros:
+  yay -S nordvpn-bin
+  
+  # Example for all other distros maybe? (Official installer script, untested in bazzite)
    sh <(wget -qO - https://downloads.nordcdn.com/apps/linux/install.sh
 
   # Enable and start the system service:
@@ -35,7 +40,23 @@ nordvpn login
 ```
 *Follow the secure browser link instructions provided in the terminal output to complete your authentication.*
 
+
 ---
+
+
+## 🚀 Quick Installation / Update
+
+The fastest way to install or update the plugin is to run the following one-liner command in the Konsole terminal while in **Desktop Mode**. This automatically downloads, extracts, and places the plugin in your Decky environment.
+
+```bash
+curl -L [https://github.com/YOUR_USERNAME/nordvpn-decky/raw/main/install.sh](https://github.com/YOUR_USERNAME/nordvpn-decky/raw/main/install.sh) | sh
+```
+
+*(Note: After running this, press your Steam Deck's physical `...` button, go to Decky settings, and click **Reload Plugins** to see it instantly).*
+
+
+---
+
 
 ## 🛠️ Building from Source
 
@@ -57,7 +78,9 @@ npm run build
 
 > ⚠️ **Note on Build Warnings:** During compilation, you may see several TypeScript warnings (`TS7016`, `TS2307`, etc.) regarding missing type declarations for React or icon packages. These are entirely harmless and safe to ignore. The project is explicitly optimized to stay small by letting Decky Loader supply these packages globally at runtime. As long as the terminal prints `created dist/index.js`, your compilation succeeded perfectly!
 
+
 ---
+
 
 ## 📦 Manual Installation / Deployment
 
@@ -71,7 +94,9 @@ Once compiled, move the parent folder structure containing your built backend co
    * **`plugin.json`** (Decky configuration manifest)
 3. Restart Decky Loader from your plugin settings on the Deck, or reboot your system. The NordVPN panel will appear right in your Quick Access Menu!
 
+
 ---
+
 
 ## 🎨 Features
 * 🟢 **Live Status Card:** Displays connection state, server, country, city, IP address, and protocol.
