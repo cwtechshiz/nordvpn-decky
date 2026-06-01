@@ -12,6 +12,8 @@ Control NordVPN directly from your Steam Deck's Quick Access Menu (QAM) — no d
 
 ## 🛑 Critical Prerequisites
 
+Obviously to use a decky plugin you need to have it installed: https://github.com/steamdeckhomebrew/decky-loader
+
 Before the Decky plugin UI can communicate with NordVPN, the underlying service must be installed and authenticated on your device.
 
 ### 1. Install NordVPN on your device
