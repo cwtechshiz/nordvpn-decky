@@ -16,7 +16,7 @@ Before the Decky plugin UI can communicate with NordVPN, the underlying service 
 
 ### 1. Install NordVPN on your device
 
-* **On SteamOS (Official Steam Deck):** The root filesystem is read-only by default and is good for undoing system changes after updates. Also Nordvpn is not in the steamos repos or available as a flatpak. So I made an automated installer script to help my steamos friends install nordvpn. Download and run it from the companion repository:
+* **On SteamOS (Official Steam Deck):** The root filesystem is read-only by default and is good for undoing system changes after updates. Also Nordvpn is not in the steamos repos or available as a flatpak. So I made an easy automated installer script to help my steamos friends install nordvpn. Download and run it from the companion repository:
   [SteamOS NordVPN Helper Scripts](https://github.com/cwtechshiz/nordvpn-steamos-scripts)
 
 * **On Alternative Handheld Distros (Bazzite, CachyOS, etc.):** You do not need the helper scripts. Simply install NordVPN natively via your package manager, AUR, or via the official way below:
@@ -46,7 +46,7 @@ nordvpn login
 The fastest way to install or update the plugin is to run the following one-liner command in the Konsole terminal while in **Desktop Mode**. This automatically downloads, extracts, and places the plugin in your Decky environment.
 
 ```bash
-curl -L [https://github.com/cwtechshiz/nordvpn-decky/raw/main/install.sh](https://github.com/YOUR_USERNAME/nordvpn-decky/raw/main/install.sh) | sh
+curl -L [https://github.com/cwtechshiz/nordvpn-decky/raw/main/install.sh](https://github.com/cwtechshiz/nordvpn-decky/raw/main/install.sh) | sh
 ```
 
 *(Note: After running this, press your Steam Deck's physical `...` button, go to Decky settings, and click **Reload Plugins** to see it instantly).*
