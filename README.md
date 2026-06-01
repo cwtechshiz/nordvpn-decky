@@ -97,6 +97,19 @@ Once compiled, move the parent folder structure containing your built backend co
 ---
 
 
+🗑️ How to Uninstall the decky plugin
+
+If you want to remove it(or any decky plugin) just remove it from the plugins folder:
+
+```bash
+# needs root priv and will prompt for password
+sudo rm -rf ~/homebrew/plugins/nordvpn-decky
+```
+
+
+---
+
+
 ## 🎨 Features
 * 🟢 **Live Status Card:** Displays connection state, server, country, city, IP address, and protocol.
 * ⚡ **One-Tap Connect:** Instantly route through the fastest available NordVPN server.
