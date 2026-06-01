@@ -2,7 +2,7 @@
 
 # Target the user's home directory plugin path
 PLUGIN_DIR="$HOME/homebrew/plugins/nordvpn-decky"
-DOWNLOAD_URL="https://github.com/YOUR_USERNAME/nordvpn-decky/releases/latest/download/nordvpn-decky.zip"
+DOWNLOAD_URL="https://github.com/cwtechshiz/nordvpn-decky/releases/latest/download/nordvpn-decky.zip"
 
 echo "Downloading latest NordVPN Decky Plugin..."
 mkdir -p /tmp/nordvpn-decky-install
