@@ -17,7 +17,7 @@ Before the Decky plugin UI can communicate with NordVPN, the underlying service 
 * **On SteamOS (Official Steam Deck):** The root filesystem is read-only by default and is good for undoing system changes after updates. Also Nordvpn is not in the steamos repos or available as a flatpak. So I made an automated installer script to help my steamos friends install nordvpn. Download and run it from the companion repository:
   [SteamOS NordVPN Helper Scripts](https://github.com/cwtechshiz/nordvpn-steamos-scripts)
 
-* **On Alternative Handheld Distros (Bazzite, CachyOS, etc.):** You do not need the helper scripts. Simply install NordVPN natively via your package manager, AUR, or offical nordvpn setup script below:
+* **On Alternative Handheld Distros (Bazzite, CachyOS, etc.):** You do not need the helper scripts. Simply install NordVPN natively via your package manager, AUR, or official nordvpn setup script below:
   ```bash
   # Official Nordvpn installer script
    sh <(wget -qO - https://downloads.nordcdn.com/apps/linux/install.sh
