@@ -48,7 +48,7 @@ nordvpn login
 The fastest way to install or update the plugin is to run the following one-liner command in the Konsole terminal while in **Desktop Mode**. This automatically downloads, extracts, and places the plugin in your Decky environment.
 
 ```bash
-curl -L [https://github.com/cwtechshiz/nordvpn-decky/raw/main/install.sh](https://github.com/cwtechshiz/nordvpn-decky/raw/main/install.sh) | sh
+curl -L https://github.com/cwtechshiz/nordvpn-decky/raw/main/install.sh | sh
 ```
 
 *(Note: After running this, press your Steam Deck's physical `...` button, go to Decky settings, and click **Reload Plugins** to see it instantly).*
