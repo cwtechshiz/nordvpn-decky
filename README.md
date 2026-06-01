@@ -99,5 +99,6 @@ Once compiled, move the parent folder structure containing your built backend co
 * 🟢 **Live Status Card:** Displays connection state, server, country, city, IP address, and protocol.
 * ⚡ **One-Tap Connect:** Instantly route through the fastest available NordVPN server.
 * 🌍 **Targeted Location:** Connect to a specific country by entering its name.
+* 🌐 **Meshnet Control:** Toggle NordVPN Meshnet on or off directly from the UI to securely link your Deck with your other trusted devices.
 * 🔌 **One-Tap Disconnect:** Safely sever the active VPN tunnel.
 * 🔄 **Smart Polling:** Configurable auto-refresh cycles to ensure status accuracy.
