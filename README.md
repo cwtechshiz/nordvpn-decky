@@ -71,7 +71,10 @@ npm install
 # 3. Install the essential TypeScript helper backend
 npm install -D tslib
 
-# 4. Compile the clean production bundle
+# 4. Install the icons too since leaving them out caused problems
+npm install react-icons
+
+# 5. Compile the clean production bundle
 npm run build
 ```
 
