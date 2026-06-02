@@ -2,6 +2,8 @@
   "name": "nordvpn-decky",
   "version": "1.0.0",
   "description": "NordVPN connect/disconnect control for Steam Deck",
+  "author": "cwtechshiz",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w"
@@ -20,5 +22,10 @@
     "decky-frontend-lib": "*",
     "react": "*",
     "react-dom": "*"
+  },
+  "publish": {
+    "tags": ["Utility", "Network", "Security"],
+    "description": "A clean frontend interface to safely connect, disconnect, and manage NordVPN configurations alongside Meshnet ecosystem toggles.",
+    "image": "https://raw.githubusercontent.com/cwtechshiz/nordvpn-decky/main/.github/assets/logo.png"
   }
 }
