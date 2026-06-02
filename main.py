@@ -40,11 +40,13 @@ class Plugin:
     @classmethod
     def _run_nord_command(cls, args):
         """
-        Executes a native NordVPN CLI command under the true non-root user profile context.
+        Executes a native NordVPN CLI command under the true user context.
+        The '-H' flag is critical for SteamOS: it forces the system to set $HOME 
+        to /home/deck, letting the background process read the correct auth tokens.
         """
         try:
             target_user = cls._get_real_user()
-            cmd = ["sudo", "-u", target_user] + args
+            cmd = ["sudo", "-H", "-u", target_user] + args
             logging.info(f"Executing CLI invocation: {' '.join(cmd)}")
             return subprocess.check_output(cmd, stderr=subprocess.STDOUT).decode("utf-8")
         except subprocess.CalledProcessError as e:
@@ -94,7 +96,6 @@ class Plugin:
         """
         try:
             raw_mesh = Plugin._run_nord_command(["nordvpn", "settings"])
-            # Returns a simple true/false state mapping directly to a UI Toggle
             return {"enabled": "meshnet: enabled" in raw_mesh.lower()}
         except Exception as e:
             logging.error(f"Exception in get_meshnet_status engine: {str(e)}")
@@ -102,11 +103,12 @@ class Plugin:
 
     async def connect(self, country=None):
         """
-        Triggers a connection request to the fastest node or a custom country target.
+        Triggers a connection request. Safely handles missing/None country inputs.
         """
         try:
             cmd = ["nordvpn", "connect"]
-            if country and country.strip():
+            # Bulletproof safety check against NoneType objects passed from the UI
+            if country is not None and isinstance(country, str) and country.strip():
                 cmd.append(country.strip())
             
             output = Plugin._run_nord_command(cmd)
@@ -133,4 +135,5 @@ class Plugin:
             output = Plugin._run_nord_command(["nordvpn", "set", "meshnet", toggle_state])
             return {"success": True, "output": output}
         except Exception as e:
-            return {"success": False, "error": str(e)}
+            return {"success": False, "error"
+                    : str(e)}
