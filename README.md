@@ -65,17 +65,11 @@ If you want to compile or modify the frontend interface asset bundle yourself on
 # 1. Clone the repository and navigate to the plugin directory
 cd nordvpn-decky
 
-# 2. Install the lightweight core dependencies
-npm install
+# 2. Install all tracked dependencies using the lockfile
+pnpm install
 
-# 3. Install the essential TypeScript helper backend
-npm install -D tslib
-
-# 4. Install the icons too since leaving them out caused problems
-npm install react-icons
-
-# 5. Compile the clean production bundle
-npm run build
+# 3. Compile the clean production bundle
+pnpm run build
 ```
 
 > ⚠️ **Note on Build Warnings:** During compilation, you may see several TypeScript warnings (`TS7016`, `TS2307`, etc.) regarding missing type declarations for React or icon packages. These are entirely harmless and safe to ignore. The project is explicitly optimized to stay small by letting Decky Loader supply these packages globally at runtime. As long as the terminal prints `created dist/index.js`, your compilation succeeded perfectly!
