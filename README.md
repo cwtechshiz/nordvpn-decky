@@ -100,7 +100,7 @@ Once compiled, move the parent folder structure containing your built backend co
 ---
 
 
-🗑️ How to Uninstall the decky plugin
+## 🗑️ How to Uninstall the decky plugin
 
 If you want to remove it(or any decky plugin) just remove it from the plugins folder:
 
