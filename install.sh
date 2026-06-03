@@ -13,9 +13,11 @@ curl -L "$DOWNLOAD_URL" -o /tmp/nordvpn-decky-install/plugin.zip
 echo "Extracting files to Decky environment (requires sudo)..."
 # Decky root service owns this folder, so sudo is required to modify it
 sudo mkdir -p "$PLUGIN_DIR"
+
+# to wipe pre-existing files on updates
 sudo rm -rf "$PLUGIN_DIR"/*
 
-# Extracting directly into $PLUGIN_DIR maps your flat ZIP layout perfectly!
+# Extracting directly into $PLUGIN_DIR
 sudo unzip -q /tmp/nordvpn-decky-install/plugin.zip -d "$PLUGIN_DIR"
 
 # Clean up temporary files
