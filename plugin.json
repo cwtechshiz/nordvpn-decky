@@ -1,7 +1,7 @@
 {
   "name": "NordVPN",
   "author": "cwtechshiz",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "main": "main.py",
   "flags": [],
   "description": "Control NordVPN directly from your Steam Deck quick access menu. Connect, disconnect, and manage Meshnet without touching the terminal.",
