@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - testing-branch # <-- Change "testing-branch" to your exact testing branch name!
+      - testing
     tags:
       - 'v*' # Triggers whenever you release a tag like v1.0.0
   workflow_dispatch: # Allows you to manually trigger a build from the GitHub website
