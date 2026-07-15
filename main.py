@@ -1,9 +1,9 @@
 import os
 import subprocess
 import logging
-import pwd  # Standard Linux user database module
+import pwd
+import shutil  # Added to check for binary installation pathing
 
-# Configure Decky plugin log tracking
 logging.basicConfig(
     filename="/tmp/nordvpn-decky.log", 
     format='[NordVPN-Backend] %(levelname)s: %(message)s', 
@@ -19,31 +19,19 @@ class Plugin:
 
     @classmethod
     def _get_real_user(cls):
-        """
-        Dynamically extracts the genuine primary user profile via system UID.
-        This completely bypasses broken systemd environment contexts.
-        """
         try:
-            # Universal Linux standard: The primary user account is always UID 1000
             return pwd.getpwuid(1000).pw_name
         except Exception as e:
             logging.error(f"UID 1000 lookup failed ({e}), attempting environment fallback...")
-            
-            # Defensive fallbacks if UID mapping behaves unexpectedly
             real_user = os.environ.get("SUDO_USER")
             if not real_user or real_user == "root":
                 real_user = os.environ.get("USER")
             if not real_user or real_user == "root":
-                return "deck"  # Hard rock-bottom safe default
+                return "deck"
             return real_user
 
     @classmethod
     def _run_nord_command(cls, args):
-        """
-        Executes a native NordVPN CLI command under the true user context.
-        The '-H' flag is critical for SteamOS: it forces the system to set $HOME 
-        to /home/deck, letting the background process read the correct auth tokens.
-        """
         try:
             target_user = cls._get_real_user()
             cmd = ["sudo", "-H", "-u", target_user] + args
@@ -56,12 +44,18 @@ class Plugin:
 
     async def get_status(self):
         """
-        PURE VPN STATUS: Queries connection and network mapping state only.
+        Queries connection state, but first verifies if NordVPN is installed on the OS.
         """
         try:
-            raw_vpn = Plugin._run_nord_command(["nordvpn", "status"])
+            # Check system pathing and common direct system directories for the binary
+            is_installed = (
+                shutil.which("nordvpn") is not None or 
+                os.path.exists("/usr/bin/nordvpn") or 
+                os.path.exists("/usr/local/bin/nordvpn")
+            )
             
             status_map = {
+                "installed": is_installed,
                 "connected": False,
                 "server": "N/A",
                 "country": "N/A",
@@ -69,6 +63,12 @@ class Plugin:
                 "ip": "N/A",
                 "protocol": "N/A"
             }
+            
+            if not is_installed:
+                logging.warning("NordVPN binary was not detected on this system environment.")
+                return status_map
+
+            raw_vpn = Plugin._run_nord_command(["nordvpn", "status"])
             
             for line in raw_vpn.splitlines():
                 line = line.strip()
@@ -88,13 +88,14 @@ class Plugin:
             return status_map
         except Exception as e:
             logging.error(f"Global exception in get_status engine: {str(e)}")
-            return {"error": str(e)}
+            return {"error": str(e), "installed": True}
 
     async def get_meshnet_status(self):
-        """
-        PURE MESHNET STATUS: Returns a clean boolean for the frontend toggle switch.
-        """
         try:
+            # Check installation setup before running settings command
+            if not shutil.which("nordvpn") and not os.path.exists("/usr/bin/nordvpn"):
+                return {"enabled": False}
+                
             raw_mesh = Plugin._run_nord_command(["nordvpn", "settings"])
             return {"enabled": "meshnet: enabled" in raw_mesh.lower()}
         except Exception as e:
@@ -102,12 +103,8 @@ class Plugin:
             return {"error": str(e), "enabled": False}
 
     async def connect(self, country=None):
-        """
-        Triggers a connection request. Safely handles missing/None country inputs.
-        """
         try:
             cmd = ["nordvpn", "connect"]
-            # Bulletproof safety check against NoneType objects passed from the UI
             if country is not None and isinstance(country, str) and country.strip():
                 cmd.append(country.strip())
             
@@ -117,9 +114,6 @@ class Plugin:
             return {"success": False, "error": str(e)}
 
     async def disconnect(self):
-        """
-        Disconnects the active VPN session safely.
-        """
         try:
             output = Plugin._run_nord_command(["nordvpn", "disconnect"])
             return {"success": True, "output": output}
@@ -127,13 +121,9 @@ class Plugin:
             return {"success": False, "error": str(e)}
 
     async def toggle_meshnet(self, enabled: bool):
-        """
-        Modifies the local Meshnet overlay operational status.
-        """
         try:
             toggle_state = "on" if enabled else "off"
             output = Plugin._run_nord_command(["nordvpn", "set", "meshnet", toggle_state])
             return {"success": True, "output": output}
         except Exception as e:
-            return {"success": False, "error"
-                    : str(e)}
+            return {"success": False, "error": str(e)}

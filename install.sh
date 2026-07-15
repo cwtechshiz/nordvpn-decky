@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# Target the user's home directory plugin path
-PLUGIN_DIR="$HOME/homebrew/plugins/nordvpn-decky"
+# Target the parent plugins directory
+PLUGINS_DIR="$HOME/homebrew/plugins"
+PLUGIN_DIR="$PLUGINS_DIR/nordvpn-decky"
 DOWNLOAD_URL="https://github.com/cwtechshiz/nordvpn-decky/releases/latest/download/nordvpn-decky.zip"
 
 echo "Downloading latest NordVPN Decky Plugin..."
@@ -11,17 +12,17 @@ mkdir -p /tmp/nordvpn-decky-install
 curl -L "$DOWNLOAD_URL" -o /tmp/nordvpn-decky-install/plugin.zip
 
 echo "Extracting files to Decky environment (requires sudo)..."
-# Decky root service owns this folder, so sudo is required to modify it
-sudo mkdir -p "$PLUGIN_DIR"
+# Ensure the parent homebrew plugins directory exists
+sudo mkdir -p "$PLUGINS_DIR"
 
-# to wipe pre-existing files on updates
-sudo rm -rf "$PLUGIN_DIR"/*
+# Wipe the pre-existing directory entirely to ensure clean updates
+sudo rm -rf "$PLUGIN_DIR"
 
-# Extracting directly into $PLUGIN_DIR
-sudo unzip -q /tmp/nordvpn-decky-install/plugin.zip -d "$PLUGIN_DIR"
+# Extract directly into PLUGINS_DIR. 
+# Since the zip has a "nordvpn-decky" folder, it will cleanly extract as "$PLUGINS_DIR/nordvpn-decky"
+sudo unzip -q /tmp/nordvpn-decky-install/plugin.zip -d "$PLUGINS_DIR"
 
 # Clean up temporary files
 rm -rf /tmp/nordvpn-decky-install
 
-echo "Installation complete! Please reload your plugins in Decky Loader set
-tings."
+echo "Installation complete! Please reload your plugins in Decky Loader settings."
