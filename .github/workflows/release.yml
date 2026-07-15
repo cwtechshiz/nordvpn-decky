@@ -1,0 +1,73 @@
+name: Build and Package Plugin
+
+on:
+  push:
+    branches:
+      - main
+      - testing-branch # <-- Change "testing-branch" to your exact testing branch name!
+    tags:
+      - 'v*' # Triggers whenever you release a tag like v1.0.0
+  workflow_dispatch: # Allows you to manually trigger a build from the GitHub website
+
+permissions:
+  contents: write # Needed so the script can attach the ZIP to your GitHub Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install Node Dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Compile React Frontend
+        run: pnpm run build
+
+      - name: Package Plugin into Zip
+        run: |
+          # 1. Read the plugin name from plugin.json and convert it to lowercase-kebab-case
+          PLUGIN_NAME=$(node -p "require('./plugin.json').name.toLowerCase().replace(/\s+/g, '-')")
+          echo "Packaging plugin as: $PLUGIN_NAME"
+          
+          # 2. Create the temporary directory structured for Decky Loader
+          mkdir -p $PLUGIN_NAME
+          
+          # 3. Copy the compiled frontend, Python backend, and metadata files into it
+          cp -r dist main.py plugin.json package.json $PLUGIN_NAME/
+          
+          # 4. Grab optional assets or bin directories if you created them
+          if [ -d "assets" ]; then cp -r assets $PLUGIN_NAME/; fi
+          if [ -d "bin" ]; then cp -r bin $PLUGIN_NAME/; fi
+          
+          # 5. Compress into the final Decky-compatible zip file
+          zip -r ${PLUGIN_NAME}.zip $PLUGIN_NAME
+          
+          # 6. Save the ZIP's path to use in subsequent steps
+          echo "ZIP_PATH=${PLUGIN_NAME}.zip" >> $GITHUB_ENV
+
+      - name: Save Zip as Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-plugin
+          path: ${{ env.ZIP_PATH }}
+
+      - name: Upload Zip to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v') # ONLY runs when you publish a "v*" tag
+        uses: softprops/action-gh-release@v3
+        with:
+          files: ${{ env.ZIP_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
